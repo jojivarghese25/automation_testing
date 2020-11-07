@@ -4,7 +4,7 @@ pipeline {
    stage('Build') {
       steps {
         withEnv(overrides: ["JAVA_HOME=${ tool 'JDK 8' }", "PATH+MAVEN=${tool 'Maven'}/bin:${env.JAVA_HOME}/bin"]) {
-          bat 'mvn -f cucumber-API-Framework/pom.xml clean install'
+          bat 'mvn -f apiops-anypoint-bdd-sapi/pom.xml clean install -DskipTests'
         }
 
       }
@@ -86,7 +86,7 @@ pipeline {
     stage('FunctionalTesting') {
       steps {
         withEnv(overrides: ["JAVA_HOME=${ tool 'JDK 8' }", "PATH+MAVEN=${tool 'Maven'}/bin:${env.JAVA_HOME}/bin"]) {
-          bat 'mvn -f cucumber-API-Framework/pom.xml test -Dtestfile=runner.helloworld.java'
+          bat 'mvn -f cucumber-API-Framework/pom.xml test'
         }
 
       }
