@@ -16,11 +16,11 @@ pipeline {
         //script {
           //pom = readMavenPom file: "apiops-anypoint-bdd-sapi/pom.xml";
 
-    /*stage('Munit') {
+    stage('Munit') {
       steps {
         sh 'mvn -f apiops-anypoint-bdd-sapi/pom.xml test'
       }
-    }*/
+    }
 
    //stage('Deploy') {
      // steps {
@@ -61,7 +61,7 @@ pipeline {
                     }
                 }
             }*/
-     stage('Build image') {
+     /*stage('Build image') {
       steps {
         script {
           dockerImage= docker.build("njc/apiops-anypoint-bdd-sapi")
@@ -79,7 +79,7 @@ pipeline {
 
         echo 'container running'
       }
-    }
+    }*/
 
 
 
