@@ -48,7 +48,7 @@ pipeline {
     }*/
     stage('SonarQube'){
             steps {
-                withSonarQubeEnv('Sonarqube') {
+                withSonarQubeEnv('SonarQube') {
                    sh "mvn -f apiops-anypoint-bdd-sapi/pom.xml sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.sources=src/main/"
            
                 }
