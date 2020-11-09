@@ -45,13 +45,21 @@ pipeline {
 
 
       }
-    }
+    }*/
+    stage('SonarQube'){
+            steps {
+                withSonarQubeEnv('Sonarqube') {
+                   sh "mvn -f apiops-anypoint-bdd-sapi/pom.xml sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.sources=src/main/"
+           
+                }
+            }
+        }
 
         stage('Quality Gate'){
             steps {
                 script {
                     timeout(time: 1, unit: 'HOURS') { 
-                        sh "curl -u admin:admin -X GET -H 'Accept: application/json' http://localhost:9000/api/qualitygates/project_status?projectKey=com.mycompany:sonarqube-poc > status.json"
+                        sh "curl -u admin:admin -X GET -H 'Accept: application/json' http://localhost:9000/api/qualitygates/project_status?projectKey=com.mycompany:apiops-anypoint-bdd-sapi > status.json"
                         def json = readJSON file:'status.json'
                         echo "${json.projectStatus}"
                         if ("${json.projectStatus.status}" != "OK") {
@@ -60,7 +68,7 @@ pipeline {
                         }
                     }
                 }
-            }*/
+            }
      /*stage('Build image') {
       steps {
         script {
