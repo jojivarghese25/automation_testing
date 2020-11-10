@@ -4,7 +4,7 @@ pipeline {
    stage('Build') {
       steps {
         withEnv(overrides: ["JAVA_HOME=${ tool 'JDK 8' }", "PATH+MAVEN=${tool 'Maven'}/bin:${env.JAVA_HOME}/bin"]) {
-          bat 'mvn -f cucumber-API-Framework/pom.xml clean install'
+          bat 'mvn -f apiops-anypoint-bdd-sapi/pom.xml clean install -DskipTests'
         }
 
       }
@@ -16,11 +16,11 @@ pipeline {
         //script {
           //pom = readMavenPom file: "apiops-anypoint-bdd-sapi/pom.xml";
 
-    /*stage('Munit') {
+    stage('Munit') {
       steps {
         sh 'mvn -f apiops-anypoint-bdd-sapi/pom.xml test'
       }
-    }*/
+    }
 
    //stage('Deploy') {
      // steps {
@@ -37,7 +37,7 @@ pipeline {
       //}
     //}
 
-   /* stage('Deploy') {
+   stage('Deploy') {
       steps {
         withEnv(overrides: ["JAVA_HOME=${ tool 'JDK 8' }", "PATH+MAVEN=${tool 'Maven'}/bin:${env.JAVA_HOME}/bin"]) {
           sh 'mvn -f apiops-anypoint-bdd-sapi/pom.xml package deploy -DmuleDeploy -Dtestfile=runner.TestRunner.java -Danypoint.username=joji4 -Danypoint.password=Canadavisa25@ -DapplicationName=apiops-bdd-sapi-jo -Dcloudhub.region=us-east-2'
@@ -46,12 +46,20 @@ pipeline {
 
       }
     }
+    /*stage('SonarQube'){
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                   sh "mvn -f apiops-anypoint-bdd-sapi/pom.xml sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.sources=src/main/"
+           
+                }
+            }
+        }
 
         stage('Quality Gate'){
             steps {
                 script {
                     timeout(time: 1, unit: 'HOURS') { 
-                        sh "curl -u admin:admin -X GET -H 'Accept: application/json' http://localhost:9000/api/qualitygates/project_status?projectKey=com.mycompany:sonarqube-poc > status.json"
+                        sh "curl -u admin:admin -X GET -H 'Accept: application/json' http://localhost:9000/api/qualitygates/project_status?projectKey=com.mycompany:apiops-anypoint-bdd-sapi > status.json"
                         def json = readJSON file:'status.json'
                         echo "${json.projectStatus}"
                         if ("${json.projectStatus.status}" != "OK") {
@@ -60,9 +68,11 @@ pipeline {
                         }
                     }
                 }
-            }*/
+            }
+        }
      stage('Build image') {
       steps {
+        
         script {
           dockerImage= docker.build("njc/apiops-anypoint-bdd-sapi")
         }
@@ -74,19 +84,20 @@ pipeline {
     stage('Run container') {
       steps {
         script {
-          bat 'docker run -itd -p 192.168.1.64:8081:8081 --name apiops-anypoint-bdd-sapi  njc/apiops-anypoint-bdd-sapi'
+          bat 'docker run -itd -p 8081:8081 --name apiops-anypoint-bdd-sapi  njc/apiops-anypoint-bdd-sapi'
         }
 
         echo 'container running'
       }
-    }
+    }*/
 
 
 
     stage('FunctionalTesting') {
       steps {
+        sleep(10)
         withEnv(overrides: ["JAVA_HOME=${ tool 'JDK 8' }", "PATH+MAVEN=${tool 'Maven'}/bin:${env.JAVA_HOME}/bin"]) {
-          sh 'mvn -f cucumber-API-Framework/pom.xml test -Dtestfile=runner.helloworld.java'
+          bat 'mvn -f cucumber-API-Framework/pom.xml test'
         }
 
       }
@@ -114,10 +125,11 @@ pipeline {
       }
     }
   
- /*stage('Kill container') {
+/* stage('Kill container') {
       steps {
         script {
-          bat 'docker rm -f apiops-anypoint-bdd-sapi'
+          bat 'docker stop apiops-anypoint-bdd-sapi'
+          bat 'docker rm apiops-anypoint-bdd-sapi'
         }
 
 
