@@ -26,7 +26,7 @@ pipeline {
       steps {
         
         withEnv(overrides: ["JAVA_HOME=${ tool 'JDK 8' }", "PATH+MAVEN=${tool 'Maven'}/bin:${env.JAVA_HOME}/bin"]) {
-          sh 'mvn -f apiops-anypoint-jenkins-sapi/pom.xml test -Dtestfile=/src/test/java/runner.TestRunner.java'
+          sh 'mvn -f cucumber-API-Framework/pom.xml test -Dtestfile=/src/test/java/runner.TestRunner.java'
         }
 
       }
