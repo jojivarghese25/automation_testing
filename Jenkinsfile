@@ -16,7 +16,7 @@ pipeline {
         //script {
           //pom = readMavenPom file: "apiops-anypoint-bdd-sapi/pom.xml";
 
-    /*stage('Munit') {
+    stage('Munit') {
       steps {
         sh 'mvn -f apiops-anypoint-bdd-sapi/pom.xml test'
       }
@@ -37,7 +37,7 @@ pipeline {
       //}
     //}
 
-   /* stage('Deploy') {
+   stage('Deploy') {
       steps {
         withEnv(overrides: ["JAVA_HOME=${ tool 'JDK 8' }", "PATH+MAVEN=${tool 'Maven'}/bin:${env.JAVA_HOME}/bin"]) {
           sh 'mvn -f apiops-anypoint-bdd-sapi/pom.xml package deploy -DmuleDeploy -Dtestfile=runner.TestRunner.java -Danypoint.username=joji4 -Danypoint.password=Canadavisa25@ -DapplicationName=apiops-bdd-sapi-jo -Dcloudhub.region=us-east-2'
@@ -46,7 +46,7 @@ pipeline {
 
       }
     }
-    stage('SonarQube'){
+    /*stage('SonarQube'){
             steps {
                 withSonarQubeEnv('SonarQube') {
                    sh "mvn -f apiops-anypoint-bdd-sapi/pom.xml sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.sources=src/main/"
@@ -69,7 +69,7 @@ pipeline {
                     }
                 }
             }
-        }*/
+        }
      stage('Build image') {
       steps {
         
@@ -89,7 +89,7 @@ pipeline {
 
         echo 'container running'
       }
-    }
+    }*/
 
 
 
@@ -125,7 +125,7 @@ pipeline {
       }
     }
   
- stage('Kill container') {
+/* stage('Kill container') {
       steps {
         script {
           bat 'docker stop apiops-anypoint-bdd-sapi'
@@ -135,7 +135,7 @@ pipeline {
 
         echo 'container Killed'
       }
-    }
+    }*/
 
 
   
